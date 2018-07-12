@@ -1,8 +1,7 @@
 
 nodes = [
-  { :hostname => 'master',  :ip => '10.0.0.10', :id => '10' },
-  { :hostname => 'node1',   :ip => '10.0.0.11', :id => '11' },
-
+  { :hostname => 'master', :ip => '10.0.0.10', :id => '10' },
+  { :hostname => 'node1',  :ip => '10.0.0.11', :id => '11' },
 ]
 
 Vagrant.configure("2") do |config|
@@ -24,9 +23,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "lab-setup.yml"
-          ansible.extra_vars = {
-            ansible_python_interpreter: "/usr/bin/python3",
-          }
+      ansible.extra_vars = {
+        ansible_python_interpreter: "/usr/bin/python3",
+      }
   end
 
 end

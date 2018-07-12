@@ -33,6 +33,22 @@
         - kubelet
         - kubectl
         - ntp
+ 
+    - name: Edit /etc/systemd/system/kubelet.service.d/kube10-kubeadm.conf (master)
+      lineinfile:
+        path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+        state: present
+        insertafter: '^Environment='
+        line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.10"'
+      when: "'master' in inventory_hostname"
+
+    - name: Edit /etc/systemd/system/kubelet.service.d/10-kubeadm.conf (worker)
+      lineinfile:
+        path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+        state: present
+        insertafter: '^Environment='
+        line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.11"'
+      when: "'node' in inventory_hostname"
 
     - name: Load (modprobe) additional kernel modules
       command: modprobe {{ item }}
@@ -131,4 +147,3 @@
       service:
         name: kubelet
         state: restarted
-        
