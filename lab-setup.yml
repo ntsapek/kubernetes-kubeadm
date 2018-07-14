@@ -23,41 +23,45 @@
         filename: kubernetes
         state: present
 
-    - name: Install required packages
+    - name: Install docker
       apt: 
-        name: "{{ packages }}"
-      vars:
-        packages:
-        - docker.io
-        - kubeadm
-        - kubelet
-        - kubectl
-        - ntp
- 
-    - name: Edit /etc/systemd/system/kubelet.service.d/kube10-kubeadm.conf (master)
-      lineinfile:
-        path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+        name: docker.io
         state: present
-        insertafter: '^Environment='
-        line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.10"'
-      when: "'master' in inventory_hostname"
 
-    - name: Edit /etc/systemd/system/kubelet.service.d/10-kubeadm.conf (worker)
-      lineinfile:
-        path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    - name: Install kubelet (version 1.9.1-00)
+      apt:
+        name: kubelet=1.9.1-00
         state: present
-        insertafter: '^Environment='
-        line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.11"'
-      when: "'node' in inventory_hostname"
 
-    - name: Load (modprobe) additional kernel modules
-      command: modprobe {{ item }}
-      with_items:
-      - ip_vs
-      - ip_vs_rr
-      - ip_vs_wrr
-      - ip_vs_sh
-      - nf_conntrack_ipv4
+    - name: Install kubeadm (version 1.9.1-00)
+      apt:
+        name: kubeadm=1.9.1-00
+        state: present
+
+    #- name: Edit /etc/systemd/system/kubelet.service.d/kube10-kubeadm.conf (master)
+    #  lineinfile:
+    #    path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    #    state: present
+    #    insertafter: '^Environment='
+    #    line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.10"'
+    #  when: "'master' in inventory_hostname"
+
+    #- name: Edit /etc/systemd/system/kubelet.service.d/10-kubeadm.conf (worker)
+    #  lineinfile:
+    #    path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    #    state: present
+    #    insertafter: '^Environment='
+    #    line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.11"'
+    #  when: "'node' in inventory_hostname"
+
+    #- name: Load (modprobe) additional kernel modules
+    #  command: modprobe {{ item }}
+    #  with_items:
+    #  - ip_vs
+    #  - ip_vs_rr
+    #  - ip_vs_wrr
+    #  - ip_vs_sh
+    #  - nf_conntrack_ipv4
 
     - name: Download the kube-flannel.yml file
       get_url:
@@ -100,11 +104,11 @@
       become_user: vagrant
       when: "'master' in inventory_hostname" 
 
-    #- name: Allow the master node to run other pods
-    #  shell: >
-    #    kubectl taint nodes --all node-role.kubernetes.io/master-
-    #  become_user: vagrant
-    #  when: "'master' in inventory_hostname"
+    - name: Allow the master node to run other pods
+      shell: >
+        kubectl taint nodes --all node-role.kubernetes.io/master-
+      become_user: vagrant
+      when: "'master' in inventory_hostname"
 
     - name: Enable bach completion
       shell: >

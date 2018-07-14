@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
       nodeconfig.vm.network :private_network, ip: node[:ip]
       nodeconfig.vm.provider :virtualbox do |vb|
         vb.name = node[:hostname]
-        vb.memory = 8000
+        vb.memory = 2000
         vb.cpus = 2
         #vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
         #vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
