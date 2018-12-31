@@ -2,11 +2,11 @@
 - hosts: all
   become: yes
 
-  tasks:        
+  tasks:
     - name: Update the system
       apt: update_cache=yes upgrade=dist
 
-    - name: Install apt-transtport-https
+    - name: Install apt-transport-https
       apt:
         name: apt-transport-https
         state: latest
@@ -24,7 +24,7 @@
         state: present
 
     - name: Install docker
-      apt: 
+      apt:
         name: docker.io
         state: present
 
@@ -71,13 +71,14 @@
 
     - name: Initialize the cluster
       shell: >
-        kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr 10.244.0.0/16
-      when: "'master' in inventory_hostname" 
+        kubeadm init --apiserver-advertise-address=192.168.99.110 --pod-network-cidr 10.244.0.0/16
+      when: "'master' in inventory_hostname"
 
     - name: Allow a non-root user to access the cluster (1)
       file:
         path: "/home/vagrant/.kube"
         state: directory
+      become_user: vagrant
 
     - name: Allow a non-root user to access the cluster (2)
       copy:
@@ -86,23 +87,26 @@
         dest: "/home/vagrant/.kube/config"
         remote_src: yes
         owner: vagrant
-        group: vagrant        
-      when: "'master' in inventory_hostname"  
+        group: vagrant
+      #become: yes
+      #become_user: vagrant
+      when: "'master' in inventory_hostname"
 
     - name: Allow a non-root user to access the cluster (3)
-      copy: 
+      copy:
         mode: preserve
         src: "/root/kube-flannel.yml"
         dest: "/home/vagrant"
         remote_src: yes
-      when: "'master' in inventory_hostname" 
+      #become: yes
+      #become_user: vagrant
+      when: "'master' in inventory_hostname"
 
     - name: Apply the kube-flannel.yml configuration to the cluster
       shell: >
         kubectl apply -f kube-flannel.yml
-      become: yes
       become_user: vagrant
-      when: "'master' in inventory_hostname" 
+      when: "'master' in inventory_hostname"
 
     - name: Allow the master node to run other pods
       shell: >
@@ -113,7 +117,6 @@
     - name: Enable bach completion
       shell: >
         echo "source <(kubectl completion bash)" >> /home/vagrant/.bashrc
-      become: yes
       become_user: vagrant
 
     - name: Get the token
@@ -121,7 +124,7 @@
         kubeadm token list |grep -v '^T' |awk '{print$1}' |head -n1 | tee /vagrant/token.txt
       when: "'master' in inventory_hostname"
 
-    - name: Get the hex 
+    - name: Get the hex
       shell: >
         openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt |openssl rsa -pubin -outform der \
         2>/dev/null |openssl dgst -sha256 -hex |sed 's/^.* //' | tee /vagrant/sha256.txt
@@ -129,21 +132,21 @@
       become_user: vagrant
       when: "'master' in inventory_hostname"
 
-    - name: Register the token in node1
+    - name: Register the token in node
       shell: >
         cat /vagrant/token.txt
       register: token
       when: "'node' in inventory_hostname"
 
-    - name: Register the sha256 in node1
+    - name: Register the sha256 in node
       shell: >
         cat /vagrant/sha256.txt
       register: sha256
-      when: "'node' in inventory_hostname" 
+      when: "'node' in inventory_hostname"
 
     - name: Join the cluster
       shell: >
-        kubeadm join --token {{ token.stdout_lines.0 }} 10.0.0.10:6443 \
+        kubeadm join --token {{ token.stdout_lines.0 }} 192.168.99.110:6443 \
         --discovery-token-ca-cert-hash sha256:{{ sha256.stdout_lines.0 }}
       when: "'node' in inventory_hostname"
 
