@@ -158,6 +158,10 @@
         --discovery-token-ca-cert-hash sha256:{{ sha256.stdout_lines.0 }}
       when: "'node' in inventory_hostname"
 
+    - name: Run daemon-reload to make sure systemd has read any changes
+      systemd:
+        daemon_reload: yes
+
     - name: Restart kubelet
       service:
         name: kubelet
