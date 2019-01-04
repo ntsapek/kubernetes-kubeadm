@@ -38,29 +38,29 @@
         name: kubeadm=1.9.1-00
         state: present
 
-    #- name: Edit /etc/systemd/system/kubelet.service.d/kube10-kubeadm.conf (master)
-    #  lineinfile:
-    #    path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-    #    state: present
-    #    insertafter: '^[Service]'
-    #    line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.99.110"'
-    #  when: "'master' in inventory_hostname"
+    - name: Edit /etc/systemd/system/kubelet.service.d/kube10-kubeadm.conf (master)
+      lineinfile:
+        path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+        state: present
+        insertafter: '^[Service]'
+        line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.99.110"'
+      when: "'master' in inventory_hostname"
 
-    #- name: Edit /etc/systemd/system/kubelet.service.d/10-kubeadm.conf (node1)
-    #  lineinfile:
-    #    path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-    #    state: present
-    #    insertafter: '^[Service]'
-    #    line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.99.111"'
-    #  when: "'node1' in inventory_hostname"
+    - name: Edit /etc/systemd/system/kubelet.service.d/10-kubeadm.conf (node1)
+      lineinfile:
+        path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+        state: present
+        insertafter: '^[Service]'
+        line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.99.111"'
+      when: "'node1' in inventory_hostname"
 
-    #- name: Edit /etc/systemd/system/kubelet.service.d/10-kubeadm.conf (node2)
-    #  lineinfile:
-    #    path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-    #    state: present
-    #    insertafter: '^[Service]'
-    #    line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.99.112"'
-    #  when: "'node2' in inventory_hostname"
+    - name: Edit /etc/systemd/system/kubelet.service.d/10-kubeadm.conf (node2)
+      lineinfile:
+        path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+        state: present
+        insertafter: '^[Service]'
+        line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.99.112"'
+      when: "'node2' in inventory_hostname"
 
     #- name: Load (modprobe) additional kernel modules
     #  command: modprobe {{ item }}
