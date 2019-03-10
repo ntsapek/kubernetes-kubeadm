@@ -1,5 +1,5 @@
 # kubernetes-kubeadm
-Create a Kubernetes cluster using kubeadm
+Bootstrap a Kubernetes cluster
 
 We use an ansible playbook to automate the creation of a Kubernetes cluster via kubeadm. The cluster consists of one master and two worker nodes.
 
