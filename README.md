@@ -1,22 +1,20 @@
 # kubernetes-kubeadm
-Bootstrap a Kubernetes cluster
+Bootstrap a Kubernetes cluster.
 
-We use an ansible playbook to automate the creation of a Kubernetes cluster via kubeadm. The cluster consists of one master and two worker nodes.
+An ansible playbook is used to automate the creation of a Kubernetes cluster via kubeadm. The cluster consists of one master and two worker nodes.
 
-The details of the nodes are defined in the Vagrantfile.
-
-Virtualbox is being used as provider.
+The details of the nodes are defined in the Vagrantfile and Virtualbox is being used as vagrant provider.
 
 Start by typing:
 
-```vagrant up```
+```$ vagrant up```
 
-After the completion of the playbook, login to the master node and check the status:
+Wait for the playbook to finish and login to the master node to check the status of the rest:
 
-```vagrant ssh master```
+```$ vagrant ssh master```
 
 
-```vagrant@master:~$ kubectl get nodes```
+```$ vagrant@master:~$ kubectl get nodes```
 
 ```NAME     STATUS   ROLES    AGE     VERSION
 master   Ready    master   21m     v1.9.1
