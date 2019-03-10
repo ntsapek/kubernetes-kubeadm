@@ -8,7 +8,7 @@ Start by typing:
 
 ```vagrant up```
 
-After the completion of the playbook, login to the master node and check the status of the nodes:
+After the completion of the playbook, login to the master node and check the status:
 
 ```vagrant ssh master```
 
