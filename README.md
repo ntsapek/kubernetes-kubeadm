@@ -1,9 +1,7 @@
 # kubernetes-kubeadm
 Bootstrap a Kubernetes cluster.
 
-An ansible playbook is used to automate the creation of a Kubernetes cluster via kubeadm. The cluster consists of one master and two worker nodes.
-
-The details of the nodes are defined in the Vagrantfile and Virtualbox is being used as vagrant provider.
+An ansible playbook is used to automate the creation of a Kubernetes cluster via kubeadm. The cluster consists of one master and two worker nodes. The details of the nodes are defined in the Vagrantfile and Virtualbox is being used as vagrant provider.
 
 Start by typing:
 
