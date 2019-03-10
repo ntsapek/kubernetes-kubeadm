@@ -1,10 +1,3 @@
-
-# nodes = [
-#   { :hostname => 'master', :ip => '10.0.0.10', :id => '10' },
-#   { :hostname => 'node1',  :ip => '10.0.0.11', :id => '11' },
-#   { :hostname => 'node2',  :ip => '10.0.0.12', :id => '12' },
-# ]
-
 nodes = [
   { :hostname => 'master', :ip => '192.168.99.110', :id => '10' },
   { :hostname => 'node1',  :ip => '192.168.99.111', :id => '11' },
@@ -21,10 +14,6 @@ Vagrant.configure("2") do |config|
         vb.name = node[:hostname]
         vb.memory = 2000
         vb.cpus = 2
-        # vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
-        # vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
-        # vb.customize ['modifyvm', :id, '--natnet1', "192.168.99/24"]
-        #vb.customize ['modifyvm', :id, '--natnet1', "192.168/16"]
       end
     end
   end

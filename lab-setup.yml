@@ -62,15 +62,6 @@
         line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.99.112"'
       when: "'node2' in inventory_hostname"
 
-    #- name: Load (modprobe) additional kernel modules
-    #  command: modprobe {{ item }}
-    #  with_items:
-    #  - ip_vs
-    #  - ip_vs_rr
-    #  - ip_vs_wrr
-    #  - ip_vs_sh
-    #  - nf_conntrack_ipv4
-
     - name: Download the kube-flannel.yml file
       get_url:
         url: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -96,8 +87,6 @@
         remote_src: yes
         owner: vagrant
         group: vagrant
-      #become: yes
-      #become_user: vagrant
       when: "'master' in inventory_hostname"
 
     - name: Allow a non-root user to access the cluster (3)
@@ -106,8 +95,6 @@
         src: "/root/kube-flannel.yml"
         dest: "/home/vagrant"
         remote_src: yes
-      #become: yes
-      #become_user: vagrant
       when: "'master' in inventory_hostname"
 
     - name: Apply the kube-flannel.yml configuration to the cluster
