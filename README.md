@@ -12,7 +12,7 @@ Wait for the playbook to finish and login to the master node to check the status
 ```$ vagrant ssh master```
 
 
-```$ vagrant@master:~$ kubectl get nodes```
+```vagrant@master:~$ kubectl get nodes```
 
 ```NAME     STATUS   ROLES    AGE     VERSION
 master   Ready    master   21m     v1.9.1
