@@ -7,7 +7,7 @@ nodes = [
 Vagrant.configure("2") do |config|
   nodes.each do |node|
     config.vm.define node[:hostname] do |nodeconfig|
-      nodeconfig.vm.box = "ubuntu/xenial64"
+      nodeconfig.vm.box = "ubuntu/bionic64"
       nodeconfig.vm.hostname = node[:hostname]
       nodeconfig.vm.network :private_network, ip: node[:ip]
       nodeconfig.vm.provider :virtualbox do |vb|
